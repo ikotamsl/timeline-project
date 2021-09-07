@@ -3,18 +3,18 @@ const {DataTypes} = require('sequelize');
 
 // Создание сущностей
 
-const collaborator = sequelize.define('collaborator', {
+const Collaborator = sequelize.define('collaborator', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     fullname: {type: DataTypes.STRING, unique: false},
     bossid: {type: DataTypes.INTEGER, unique: false}
 });
 
-const boss = sequelize.define('boss', {
+const Boss = sequelize.define('boss', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     fullname: {type: DataTypes.STRING, unique: false}
 });
 
-const task = sequelize.define('task', {
+const Task = sequelize.define('task', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     taskname: {type: DataTypes.STRING, unique: false},
     collid: {type: DataTypes.INTEGER, unique: false},
@@ -26,16 +26,16 @@ const task = sequelize.define('task', {
 
 // Связь сотрудник - задачи
 
-task.belongsTo(collaborator);
-collaborator.hasMany(task);
+Task.belongsTo(Collaborator);
+Collaborator.hasMany(Task);
 
 // Связь начальник - сотрудники
 
-boss.hasMany(collaborator);
-collaborator.belongsTo(boss);
+Boss.hasMany(Collaborator);
+Collaborator.belongsTo(Boss);
 
 module.exports = {
-    collaborator,
-    task,
-    boss
+    Collaborator,
+    Task,
+    Boss
 }
