@@ -2,10 +2,17 @@ const {Task} = require('../models/models');
 const errorHandler = require('../errors/errorHandler');
 
 class taskObject {
-    async createTask(req, res) {
-        const {taskname} = req.body;
-        const new_task = await Task.create({taskname});
-        return res.json(new_task);
+
+    // Создаём новое задание и помещаем его в базу
+
+    async createTask(req, res, next) {
+        try{
+            const {taskname, begindate, enddate, collid} = req.body;
+            const new_task = await Task.create({taskname, begindate, enddate, collid});
+            return res.json(new_task);
+        } catch (e) {
+            return next(errorHandler.badRequest(e.message));
+        }
     }
     async deleteTask(req, res) {
 
@@ -13,8 +20,12 @@ class taskObject {
     async getTask(req, res) {
 
     }
-    async getTasks(req, res) {
 
+    // Получаем все имеющиеся задания
+
+    async getTasks(req, res) {
+        const tasks = await Task.findAll();
+        return res.json(tasks);
     }
 }
 

@@ -6,7 +6,7 @@ const {DataTypes} = require('sequelize');
 const Collaborator = sequelize.define('collaborator', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     fullname: {type: DataTypes.STRING, unique: false},
-    bossid: {type: DataTypes.INTEGER, unique: false}
+    bossId: {type: DataTypes.INTEGER, unique: false}
 });
 
 const Boss = sequelize.define('boss', {
