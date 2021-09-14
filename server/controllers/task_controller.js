@@ -18,7 +18,13 @@ class taskObject {
 
     }
     async getTask(req, res) {
+        const {id} = req.params;
 
+        const task = await Task.findOne({
+            where: {id}
+        });
+
+        return res.json(task);
     }
 
     // Получаем все имеющиеся задания

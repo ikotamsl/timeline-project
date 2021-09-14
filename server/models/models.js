@@ -17,7 +17,6 @@ const Boss = sequelize.define('boss', {
 const Task = sequelize.define('task', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     taskname: {type: DataTypes.STRING, unique: false},
-    collid: {type: DataTypes.INTEGER, unique: false},
     begindate: {type: DataTypes.DATE, unique: false},
     enddate: {type: DataTypes.DATE, unique: false}
 });
