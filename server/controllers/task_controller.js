@@ -1,7 +1,7 @@
 const {Task} = require('../models/models');
 const errorHandler = require('../errors/errorHandler');
 
-class taskObject {
+class taskController {
 
     // Создаём новое задание и помещаем его в базу
 
@@ -35,4 +35,4 @@ class taskObject {
     }
 }
 
-module.exports = new taskObject();
+module.exports = new taskController();

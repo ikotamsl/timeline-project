@@ -1,7 +1,7 @@
 const errorHandler = require('../errors/errorHandler');
 const {Boss, Task, Collaborator} = require('../models/models');
 
-class bossObject {
+class bossController {
     async login(req, res) {
 
     }
@@ -58,4 +58,4 @@ class bossObject {
     }
 }
 
-module.exports = new bossObject();
+module.exports = new bossController();
