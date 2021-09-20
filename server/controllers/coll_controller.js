@@ -1,18 +1,25 @@
 const errorHandler = require('../errors/errorHandler');
-const {Task} = require("../models/models");
-const {Collaborator} = require("../models/models");
+const {Task, Collaborator} = require("../models/models");
+
 
 class collaboratorController {
-    async login(req, res) {
 
-    }
+    // Проверка авторизации сотрудника на портале
+    // А. Проверяем, задан ли ID
+    // Б. Проверяем указанный ID на его наличие в системе
+
     async authCheck(req, res, next) {
         const {id} = req.query;
 
-        if (!id) {
-            return next(errorHandler.badRequest('Не задан ID'));
-        }
+        if (!id || id < 1) {
+            return next(errorHandler.badRequest('Не задан ID сотрудника'));
+        } else {
+            const isCollaborator = await Collaborator.findOne({where: {id: id}});
 
+            if (isCollaborator === null) {
+                return next(errorHandler.forbidden('Вы не являетесь сотрудником.'));
+            }
+        }
         res.json(id);
     }
     async getTask(req, res) {

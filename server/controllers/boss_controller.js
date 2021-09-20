@@ -2,30 +2,44 @@ const errorHandler = require('../errors/errorHandler');
 const {Boss, Task, Collaborator} = require('../models/models');
 
 class bossController {
-    async login(req, res) {
 
-    }
-
-    // Проверка, авторизован ли пользователь
+    // Проверка, авторизован ли начальник
 
     async authCheck(req, res, next) {
         const {id} = req.query;
 
-        if (!id) {
-            return next(errorHandler.badRequest('Не задан ID'));
+        // Проверка на:
+        // А. Наличие ID в запросе
+        // Б. Наличие начальника по этому ID в системе.
+        // Если проверка выдаёт null, то выдаётся ошибка 403 Forbidden
+
+        if (!id || id < 1) {
+            return next(errorHandler.badRequest('Не задан ID начальника'));
+        } else {
+            const isBossFlag = await Collaborator.findOne({where: {bossId: id}});
+
+            if (isBossFlag === null) {
+                return next(errorHandler.forbidden('Вы не босс!'));
+            }
         }
 
         res.json(id);
     }
 
-    async getCollsTasks(req, res) {
+    // Получаем все имеющиеся задания для одного сотрудника
 
+    async getCollsTasks(req, res) {
+        const {coll_id} = req.params;
+
+        const tasks = await Task.findAll({where: {collaboratorId: coll_id}});
+
+        res.json(tasks);
     }
 
     // Получаем всех подчинённых данного руководителя
 
     async getCollaborators(req, res) {
-        let {fullname, bossId} = req.query,
+        let {bossId} = req.query,
             collaborators;
 
         if (bossId) {
@@ -37,24 +51,12 @@ class bossController {
         return res.json(collaborators);
     }
 
-    //Создаём нового сотрудника
+    // Создание нового сотрудника
 
     async createCollaborator(req, res) {
         const {fullname, login, password, bossId} = req.body;
         const new_coll = await Collaborator.create({fullname, login, password, bossId});
         return res.json(new_coll);
-    }
-
-    // Проверка, является ли данный пользователь руководителем
-
-    async isBoss(req, res, next) {
-        const {is_boss} = req.query;
-
-        if (!is_boss) {
-            return next(errorHandler.forbidden('Вы не являетесь начальником'));
-        } else {
-            res.json({message: 'Добро пожаловать'});
-        }
     }
 }
 
