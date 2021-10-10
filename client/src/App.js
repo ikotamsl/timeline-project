@@ -1,16 +1,16 @@
 import React from "react";
 import './App.css';
-import TimelineChart from "./components/ChartGenerator";
 import {BrowserRouter} from "react-router-dom";
 import AuthRouter from "./components/AuthRouter";
+import ChartComponent from "./components/Chart";
 
 const App = () => {
     return (
         <BrowserRouter>
             <AuthRouter />
-            <div className='App'>
-
-            </div>
+                <div className='App'>
+                    <ChartComponent />
+                </div>
         </BrowserRouter>
     )
 }
