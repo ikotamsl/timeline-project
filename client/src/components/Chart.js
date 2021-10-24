@@ -55,7 +55,7 @@ class ChartComponent extends React.Component {
 
     componentDidMount() {
 
-        let newSeries = [];
+        let newSeries = []; // Переменная обновлённого массива с данными по заданиям
 
         fetch("http://localhost:5600/api/task")
             .then(res => res.json())
@@ -66,8 +66,14 @@ class ChartComponent extends React.Component {
                         tasks: result.tasks
                     });
 
-                    console.log('tasks: ' + this.state.tasks);
-                    console.log('series: ' + this.state.series);
+
+                    // Каждое полученное с сервера задание
+                    // преобразуем в нужный для апекса формат
+                    // и пушим в массив данных
+
+                    // По всей видимости, массив tasks будет в нужном нам виде только во время выполнения fetch,
+                    // иначе я не могу объяснить, почему после выхода отсюда мы не можем также проитеррировать
+                    // this.state.tasks и заполнить this.state.series нужными нам данными. Загадка..............
 
                     this.state.tasks.forEach((task) => {
 
@@ -85,11 +91,11 @@ class ChartComponent extends React.Component {
                         newSeries.push(dbTask);
                     });
 
+                    // Обновляем массив данных диаграммы данными из БД
+
                     this.setState({
                         series: newSeries
-                    })
-
-                    console.log('new: ' + newSeries);
+                    });
 
                 },
                 // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
