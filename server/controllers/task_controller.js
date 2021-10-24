@@ -7,8 +7,8 @@ class taskController {
 
     async createTask(req, res, next) {
         try{
-            const {taskname, begindate, enddate, collid} = req.body;
-            const new_task = await Task.create({taskname, begindate, enddate, collid});
+            const {taskname, begindate, enddate, collaboratorId} = req.body;
+            const new_task = await Task.create({taskname, begindate, enddate, collaboratorId});
             return res.json(new_task);
         } catch (e) {
             return next(errorHandler.badRequest(e.message));
@@ -31,7 +31,7 @@ class taskController {
 
     async getTasks(req, res) {
         const tasks = await Task.findAll();
-        return res.json(tasks);
+        return res.json({tasks: tasks});
     }
 }
 
