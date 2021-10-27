@@ -8,7 +8,9 @@ class taskController {
     async createTask(req, res, next) {
         try{
             const {taskname, begindate, enddate, collaboratorId} = req.body;
+            console.log({taskname, begindate, enddate, collaboratorId});
             const new_task = await Task.create({taskname, begindate, enddate, collaboratorId});
+            console.log({taskname, begindate, enddate, collaboratorId});
             return res.json(new_task);
         } catch (e) {
             return next(errorHandler.badRequest(e.message));

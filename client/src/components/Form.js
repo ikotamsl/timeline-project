@@ -46,9 +46,33 @@ class Form extends React.Component {
             ]
         };
 
-        this.setState({
-            series: [...this.state.series, newTask]
-        });
+        fetch("http://localhost:5600/api/task", {
+            method: 'POST',
+            body: JSON.stringify({
+                taskname: this.state.taskName,
+                begindate: this.state.beginDate,
+                enddate: this.state.endDate,
+                collaboratorId: 1
+            }),
+            headers: {'Content-Type': 'application/json'}
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        tasks: result.tasks
+                    });
+                },
+                // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+                // чтобы не перехватывать исключения из ошибок в самих компонентах.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
     }
 
     render() {
