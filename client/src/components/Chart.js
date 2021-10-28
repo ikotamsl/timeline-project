@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from "react-apexcharts";
 import Form from "./Form";
+import forEachTasks from './components_lib/forEachTasks';
 
 class ChartComponent extends React.Component {
     constructor(props) {
@@ -55,60 +56,9 @@ class ChartComponent extends React.Component {
 
     componentDidMount() {
 
-        let newSeries = []; // Переменная обновлённого массива с данными по заданиям
+        let newSeries = [];
 
-        fetch("http://localhost:5600/api/task")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        tasks: result.tasks
-                    });
-
-
-                    // Каждое полученное с сервера задание
-                    // преобразуем в нужный для апекса формат
-                    // и пушим в массив данных
-
-                    // По всей видимости, массив tasks будет в нужном нам виде только во время выполнения fetch,
-                    // иначе я не могу объяснить, почему после выхода отсюда мы не можем также проитеррировать
-                    // this.state.tasks и заполнить this.state.series нужными нам данными. Загадка..............
-
-                    this.state.tasks.forEach((task) => {
-
-                        const dbTask = {
-                            data: [
-                                {
-                                    x: task.taskname,
-                                    y: [
-                                        new Date(task.begindate).getTime(),
-                                        new Date(task.enddate).getTime()
-                                    ]
-                                }
-                            ]
-                        }
-                        newSeries.push(dbTask);
-                    });
-
-                    // Обновляем массив данных диаграммы данными из БД
-
-                    this.setState({
-                        series: newSeries
-                    });
-
-                },
-                // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-                // чтобы не перехватывать исключения из ошибок в самих компонентах.
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            );
-
-
+        forEachTasks(newSeries, this);
     }
 
     render () {

@@ -8,8 +8,7 @@ class Form extends React.Component {
         this.state = {
             taskName: '',
             beginDate: '',
-            endDate: '',
-            series: this.props.series
+            endDate: ''
         }
     }
 
@@ -34,18 +33,6 @@ class Form extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const newTask = {
-            data: [
-                {
-                    x: this.state.taskName,
-                    y: [
-                        new Date(this.state.beginDate).getTime(),
-                        new Date(this.state.endDate).getTime()
-                    ]
-                }
-            ]
-        };
-
         fetch("http://localhost:5600/api/task", {
             method: 'POST',
             body: JSON.stringify({
@@ -58,12 +45,7 @@ class Form extends React.Component {
         })
             .then(res => res.json())
             .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        tasks: result.tasks
-                    });
-                },
+
                 // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
                 // чтобы не перехватывать исключения из ошибок в самих компонентах.
                 (error) => {
